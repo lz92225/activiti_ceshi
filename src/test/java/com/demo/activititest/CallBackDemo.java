@@ -12,6 +12,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.impl.persistence.entity.HistoricTaskInstanceEntityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -108,14 +109,22 @@ public class CallBackDemo {
                 .list();
 
         for (HistoricActivityInstance instance : actList) {
-            logger.info("活动实例："+instance);
+            logger.info("hi活动实例："+instance);
         }
         List<HistoricTaskInstance> taskList = historyService.createHistoricTaskInstanceQuery()
                 .processInstanceId(instanceid)
                 .list();
         for (HistoricTaskInstance instance : taskList) {
-            logger.info("任务实例："+instance);
+            logger.info("hi任务实例："+instance.getProcessVariables());
         }
+        List<Execution> executionList = runtimeService.createExecutionQuery()
+                .processInstanceId(instanceid)
+                .list();
+        for (Execution instance : executionList) {
+            logger.info("活动实例："+instance);
+        }
+
+
 
     }
 
