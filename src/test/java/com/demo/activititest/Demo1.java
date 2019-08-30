@@ -5,6 +5,7 @@ import com.demo.SecurityUtil;
 import org.activiti.api.process.model.ProcessDefinition;
 import org.activiti.api.process.model.ProcessInstanceMeta;
 import org.activiti.api.process.model.builders.ProcessPayloadBuilder;
+import org.activiti.api.process.model.builders.StartProcessPayloadBuilder;
 import org.activiti.api.process.runtime.ProcessRuntime;
 import org.activiti.api.runtime.shared.query.Page;
 import org.activiti.api.runtime.shared.query.Pageable;
@@ -58,13 +59,19 @@ public class Demo1 {
     @Test
     public void deploy() {
         ProcessEngines.getDefaultProcessEngine();
+
+        logger.info("发布流程");
         Deployment deploy = repositoryService.createDeployment()
                 .addClasspathResource("leave.bpmn")
                 .name("请假审批2")
                 .deploy();
+
+        logger.info("启动流程");
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("leave_bpmn1");
         logger.info("流程实例id：" + instance.getId());
         logger.info("流程定义id：" + instance.getProcessDefinitionId());
+
+        logger.info("完成任务");
         Map<String, Object> variables = new HashMap<>();
         variables.put("day", 4);
         taskService.complete(taskService.createTaskQuery().list().get(0).getId(), variables);
@@ -149,9 +156,48 @@ public class Demo1 {
         Map<String, Object> variables = new HashMap<>();
         variables.put("day", 2);
         taskRuntime.complete(new CompleteTaskPayloadBuilder()
+
                 .withTaskId("97cde544-ca48-11e9-9444-1002b52d6afe")
                 .withVariables(variables)
                 .build());
 
+    }
+
+
+    @Test
+    public void test2() {
+        securityUtil.logInAs("se_user1");
+        String taskid = "07d15e43-cadf-11e9-b027-1002b52d6afe";
+//        taskRuntime.task(taskid);
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("day", 2);
+        taskRuntime.complete(new CompleteTaskPayloadBuilder()
+                .withTaskId(taskid)
+                .withVariables(variables)
+                .build());
+    }
+
+    @Test
+    public void test1() {
+        securityUtil.logInAs("se_user1");
+
+        ProcessEngines.getDefaultProcessEngine();
+
+        logger.info("发布流程");
+        Deployment deploy = repositoryService.createDeployment()
+                .addClasspathResource("leave.bpmn")
+                .name("请假审批2")
+                .deploy();
+
+        logger.info("启动流程");
+        org.activiti.api.process.model.ProcessInstance instance = processRuntime.start(new StartProcessPayloadBuilder()
+                .withProcessDefinitionKey("leave_bpmn1")
+                .build());
+        logger.info("流程实例id：" + instance.getId());
+        logger.info("流程定义id：" + instance.getProcessDefinitionId());
+
+
+//        logger.info("完成任务");
+//        taskRuntime.task("");
     }
 }
