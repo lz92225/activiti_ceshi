@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = DemoApplication.class)
+@SpringBootTest
 public class Demo1 {
 
     private static final Logger logger = LoggerFactory.getLogger(Demo1.class);
@@ -60,21 +60,21 @@ public class Demo1 {
     public void deploy() {
         ProcessEngines.getDefaultProcessEngine();
 
-        logger.info("发布流程");
-        Deployment deploy = repositoryService.createDeployment()
-                .addClasspathResource("leave.bpmn")
-                .name("请假审批2")
-                .deploy();
-
-        logger.info("启动流程");
-        ProcessInstance instance = runtimeService.startProcessInstanceByKey("leave_bpmn1");
-        logger.info("流程实例id：" + instance.getId());
-        logger.info("流程定义id：" + instance.getProcessDefinitionId());
-
-        logger.info("完成任务");
-        Map<String, Object> variables = new HashMap<>();
-        variables.put("day", 4);
-        taskService.complete(taskService.createTaskQuery().list().get(0).getId(), variables);
+//        logger.info("发布流程");
+//        Deployment deploy = repositoryService.createDeployment()
+//                .addClasspathResource("leave.bpmn")
+//                .name("请假审批2")
+//                .deploy();
+//
+//        logger.info("启动流程");
+//        ProcessInstance instance = runtimeService.startProcessInstanceByKey("leave_bpmn1");
+//        logger.info("流程实例id：" + instance.getId());
+//        logger.info("流程定义id：" + instance.getProcessDefinitionId());
+//
+//        logger.info("完成任务");
+//        Map<String, Object> variables = new HashMap<>();
+//        variables.put("day", 4);
+//        taskService.complete(taskService.createTaskQuery().list().get(0).getId(), variables);
     }
 
     @Test

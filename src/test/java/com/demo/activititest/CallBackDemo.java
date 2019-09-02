@@ -29,7 +29,8 @@ import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = DemoApplication.class)
-public class CallBackDemo {
+public class CallBackDemo
+{
 
     private static final Logger logger = LoggerFactory.getLogger(CallBackDemo.class);
     @Autowired
